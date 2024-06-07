@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-deployment
+  labels:
+    app: database
+spec:
+  replicas: 1 # Number of replicas
+  selector:
+    matchLabels:
+      app: database 
+  template:
+    metadata:
+      labels:
+        app: database   
+    spec:
+      containers:
+      - name: database
+        image: nouchka/sqlite3 # Image name 
+        ports:
+        - containerPort: 3306 # Container port buradan dinleyecek
+        resources:
+          limits:
+            memory: "512Mi" # Maximum memory
+            cpu: "1000m" # Maximum CPU
+          requests:
+            memory: "256Mi" # Minimum memory
+            cpu: "500m" # Minimum CPU
+        envFrom:
+        - configMapRef:
+            name: database-config # ConfigMap referansi

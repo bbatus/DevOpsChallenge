@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment ## This is the Deployment resource
+metadata:
+  name: frontend-deployment ## deployment ismi
+  labels:
+    app: frontend ##frontende ait demektir 
+spec:
+  replicas: 2 ## 2 adet pod olusturulacak
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: devopschallenge_frontend:latest ## kullanilacak image
+        imagePullPolicy: IfNotPresent 
+        ports:
+        - containerPort: 80 ## container portu
+        resources:
+          limits:
+            memory: "128Mi" ## memory limiti Maximum bellek
+            cpu: "500m" ## cpu limiti Maximum CPU
+          requests:
+            memory: "64Mi" ## memory requestinin minimum bellegi
+            cpu: "250m"   ## cpu requesti minimum CPU
+        livenessProbe:
+          httpGet:
+            path: /   ## HTTP path
+            port: 80 ## port
+          initialDelaySeconds: 30 ## Liveness probe baslangic gecikmesi
+          periodSeconds: 10 ## Liveness probe kontrol süresi
+        readinessProbe:
+          httpGet:
+            path: /   ## HTTP path
+            port: 80 ## port
+          initialDelaySeconds: 30 ## Readiness probe baslangic gecikmesi
+          periodSeconds: 10  ## Readiness probe kontrol süresi

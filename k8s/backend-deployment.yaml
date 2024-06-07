@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2 ## 2 adet pod oluşturulacak
+  selector:
+    matchLabels:
+      app: backend ## bu podlar backend uygulamasına ait olacak
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: devopschallenge_backend:latest ## kullanilacak image
+        imagePullPolicy: IfNotPresent   
+        ports:
+        - containerPort: 3000 ## container portu
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        envFrom:
+        - configMapRef:
+            name: backend-config ## configmap referansı
