@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./Frontend
+    ports:
+      - "8080:80"
+    networks:
+      - frontend-network
+    depends_on:
+      - backend
+
+  backend:
+    build: ./Backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_PATH=/app/db/devops_challenge.db
+    networks:
+      - backend-network
+      - frontend-network
+    depends_on:
+      - database
+    volumes:
+      - ./Backend:/app
+      - backend_data:/app/db
+
+  database:
+    image: nouchka/sqlite3
+    volumes:
+      - ./Database:/data
+    networks:
+      - backend-network
+
+networks:
+  frontend-network:
+  backend-network:
+
+volumes:
+  backend_data:
