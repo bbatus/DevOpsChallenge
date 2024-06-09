@@ -2,6 +2,7 @@
 
 Bu proje, bir frontend, backend ve veritabanından oluşan basit bir web uygulamasını içerir(NodeJS, HTML, SQLite3). 
 Uygulama Dockerize edilmiştir ve Kubernetes cluster üzerinde çalıştırılabilir(Minikube).
+CI/CD Jenkins tool
 
 ## Gereksinimler
 
@@ -9,6 +10,9 @@ Uygulama Dockerize edilmiştir ve Kubernetes cluster üzerinde çalıştırılab
 - Docker Compose
 - Minikube
 - kubectl
+- Jenkins
+- Prometheus
+- Grafana
 
 ## Dikkat edilen kısımlar
 
@@ -22,7 +26,7 @@ Projede Frontend, Backend için 2 adet Dockerfile bulunur.
 Database için SQLite3 kullanılmıştır.
 Bu Image'ların çalışabilmesi için öncelikle docker-compose build komutu koşulmalıdır.
 Ardından docker-compose up komutu ile ayağa kaldırılmalıdır.
-Frontend için localhost:8080, Backend için localhost:3000 üzerinden erişim sağlanabilir.
+Frontend için localhost:8081, Backend için localhost:3000 üzerinden erişim sağlanabilir.
 
 Ardından minikube başlatmak ve Docker ortamı ayarlamak için : minikube start
 eval $(minikube docker-env)
@@ -50,6 +54,12 @@ minikube ip
 Ardından host makinenizde tarayıcınızı açın ve 
 http://myapp.local adresine gidin. 
 "Welcome to the DevOps Challenge Frontend!" mesajını görmelisiniz.
+
+Ardından Jenkins için localhost:8080 portundan giris yapilip pipeline build edilmistir.
+Jenkinsfile proje kök dizininden ulasilabilir.
+
+Prometheus için localhost:9090 portundan,
+Grafana için localhost:5000 portundan ulasilabilir.
 
 
 
