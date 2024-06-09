@@ -1,25 +1,30 @@
 pipeline {
     agent any
-
     stages {
-        stage('Build') {
+        stage('Checkout SCM') {
             steps {
-                echo 'Building..'
-                sh 'docker build -t myapp:latest .'
+                checkout scm
             }
         }
-        stage('Test') {
+        stage('Build Backend') {
             steps {
-                echo 'Testing..'
-                // Buraya test komutlarını ekleyebilirsiniz
+                sh 'docker build -f Backend/Dockerfile -t devopschallenge_backend:latest .'
             }
         }
-        stage('Deploy') {
+        stage('Build Frontend') {
             steps {
-                echo 'Deploying..'
-                sh 'kubectl apply -f k8s/deployment.yaml'
-                sh 'kubectl apply -f k8s/service.yaml'
+                sh 'docker build -f Frontend/Dockerfile -t devopschallenge_frontend:latest .'
             }
+        }
+        stage('Run Docker Compose') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker-compose down'
         }
     }
 }
