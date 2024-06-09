@@ -3,7 +3,7 @@ services:
   frontend:
     build: ./Frontend
     ports:
-      - "8081:80"
+      - "8082:80"
     networks:
       - frontend-network
     depends_on:
